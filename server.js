@@ -41,7 +41,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-
   todoModel.find(function (err, todoItem) {
     if (err) {
       console.log(err);
@@ -70,12 +69,11 @@ app.get("/:newCustomLists", (req, res) => {
   });
 });
 
-
 app.post("/delete", (req, res) => {
   const checkedItem = req.body.checkboxBtn;
   const listTitle = req.body.listName;
-  
-  if(listTitle === day){
+
+  if (listTitle === day) {
     todoModel.findByIdAndDelete(checkedItem, function (err) {
       if (err) {
         console.log(err);
@@ -84,21 +82,19 @@ app.post("/delete", (req, res) => {
         res.redirect("/");
       }
     });
-
-  }else{
-    listModel.findOneAndUpdate({name: listTitle}, {$pull: {items: {_id: checkedItem}}}, function(err,foundList){
-      if(!err){
+  } else {
+    listModel.findOneAndUpdate({ name: listTitle }, { $pull: { items: { _id: checkedItem } } }, function (err, foundList) {
+      if (!err) {
         res.redirect(`/${listTitle}`);
       }
     });
   }
- 
 });
 
 app.post("/", (req, res) => {
   const item = req.body.newItem;
   const customList = req.body.list;
-  const hari = day.slice(0, day.indexOf(' '));
+  const hari = day.slice(0, day.indexOf(" "));
   const itemTodo = new todoModel({
     checked: false,
     todo: item,
@@ -116,11 +112,9 @@ app.post("/", (req, res) => {
   }
 });
 
-
 app.get("/about", (req, res) => {
   res.render("about");
 });
-
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server started on port successfully");
